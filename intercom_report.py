@@ -6,9 +6,9 @@ one_hour_ago = now - timedelta(hours=1)
 since = int(one_hour_ago.timestamp())
 until = int(now.timestamp())
 
-# === CONFIGURATION ===
-INTERCOM_TOKEN = 'dG9rOjhkNDc2NjEwX2Q4ZWJfNDA0M19hMzg1XzFkMjZhZGM4Mzg1OToxOjA='
-SLACK_WEBHOOK = 'https://hooks.slack.com/services/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'
+# Securely load from GitHub Actions secrets
+INTERCOM_TOKEN = os.environ.get("INTERCOM_TOKEN")
+SLACK_WEBHOOK = os.environ.get("SLACK_WEBHOOK")
 
 headers = {
     'Authorization': f'Bearer {INTERCOM_TOKEN}',
