@@ -1,16 +1,14 @@
 import requests
-from datetime import datetime, timedelta
-import pytz
+from datetime import datetime, timedelta, timezone
+
+now = datetime.now(timezone.utc)  # ✅ Timezone-aware UTC datetime
+one_hour_ago = now - timedelta(hours=1)
+since = int(one_hour_ago.timestamp())
+until = int(now.timestamp())
 
 # === CONFIGURATION ===
 INTERCOM_TOKEN = 'dG9rOjhkNDc2NjEwX2Q4ZWJfNDA0M19hMzg1XzFkMjZhZGM4Mzg1OToxOjA='
 SLACK_WEBHOOK = 'https://hooks.slack.com/services/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'
-TIMEZONE = pytz.timezone("Asia/Dhaka")
-
-now = datetime.now(TIMEZONE)
-one_hour_ago = now - timedelta(hours=1)
-since = int(one_hour_ago.timestamp())
-until = int(now.timestamp())
 
 headers = {
     'Authorization': f'Bearer {INTERCOM_TOKEN}',
@@ -93,7 +91,7 @@ for agent_id, chats in agent_chat_details.items():
         print(f"- Chat ID: {conv_id} at {timestamp}")
 
 # === STEP 5: FORMAT SLACK REPORT ===
-report_lines = [f"🕐 *Hourly First Replies per Agent* ({one_hour_ago.strftime('%H:%M')} – {now.strftime('%H:%M')})"]
+report_lines = [f"🕐 *Hourly Chats per Agent* ({one_hour_ago.strftime('%H:%M')} – {now.strftime('%H:%M')} UTC)"]
 
 if agent_chats:
     for agent_id, convs in agent_chats.items():
