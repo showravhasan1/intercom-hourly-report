@@ -1,24 +1,28 @@
-name: Run Intercom Report Every Minute
+name: Run Intercom Report Every Minute (Test)
 
 on:
   schedule:
-    - cron: '*/1 * * * *'  # every minute UTC
-  workflow_dispatch:
+    - cron: '*/1 * * * *'  # every 1 minute
+  workflow_dispatch:       # allow manual run too
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      - name: Install dependencies
-        run: pip install requests
+    - name: Install dependencies
+      run: pip install requests
 
-      - name: Run Intercom Report Script
-        run: python intercom_report.py
+    - name: Run the script
+      env:
+        INTERCOM_TOKEN: ${{ secrets.INTERCOM_TOKEN }}
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      run: python intercom_report.py
